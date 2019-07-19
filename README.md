@@ -11,6 +11,14 @@ struct Room {
      let length: Double
      let width: Double
 }
+
+var room1 = Room(maxOccupancy: 30, length: 28.5, width: 35.3)
+
+var room2 = room1
+room2.maxOccupancy = 28
+
+print(room1.maxOccupancy)
+print(room2.maxOccupancy)
 ```
 
 ## Question 2
@@ -31,13 +39,53 @@ a. Given the Animal class below, create a Bird subclass with a new `canFly` prop
 ```swift
 class Animal {
     var name: String = ""
-    var printDescription() {
+    
+    func printDescription() {
         print("I am an animal named \(name)")
     }
 }
+
+class Bird : Animal {
+    var canFly: Bool
+    
+    init(canFly: Bool) {
+        self.canFly = canFly
+    }
+    
+}
+
 ```
 
 b. Override the printDescription method to have the instance of the Bird object print out its name and whether it can fly
+
+``` swift
+
+
+class Bird : Animal {
+    var canFly: Bool
+    
+    init(canFly: Bool) {
+        self.canFly = canFly
+    }
+    
+    override func printDescription() {
+        if canFly == true {
+            print("I am an animal named \(name) and i can fly")
+        } else {
+            print("I am an animal named \(name) and i can not fly")
+        }
+    }
+}
+
+var bird1 = Bird(canFly: true)
+bird1.name = "Johnny"
+bird1.printDescription()
+
+
+
+
+
+```
 
 
 ## Question 4
@@ -58,17 +106,95 @@ class Bike {
 
 a. Create a `LoudBike` subclass of Bike.  When you call `ringBell` it should ring the bell in all caps.
 
-b. Give `LoudBike` a new method called `ringBell(times:)` that rings the bell a given number of times
+``` swift
 
+class LoudBike : Bike {
+    override func ringBell() {
+        if hasBell {
+            print("RING!")
+        }
+    }
+}
+
+bike1.ringBell()
+
+
+```
+
+b. Give `LoudBike` a new method called `ringBell(times:)` that rings the bell a given number of times
+``` swift
+
+class LoudBike : Bike {
+    override func ringBell() {
+        if hasBell {
+            print("RING!")
+        }
+    }
+
+    func ringBell(times: Int) {
+        for _ in  1...times {
+            ringBell()
+        }
+    }
+
+}
+
+var bike1 = LoudBike()
+
+
+
+bike1.ringBell(times: 3)
+
+```
 
 ## Question 5
 
 ```swift
+
 class Shape {
-    var name: String { return "This is a generic shape" }
+    var name: String {
+        return "Name: \(type(of: self)), Area: \(area), Perimiter: \(perimeter)"
+
+    }
     var area: Double { fatalError("Subclasses must override the area") }
     var perimeter: Double { fatalError("Subclasses must override the perimeter") }
 }
+
+class Square : Shape {
+    var sideLength = 5
+    override var area: Double {
+        get {
+            return Double(sideLength * sideLength)
+        }
+    }
+    override var perimeter: Double {
+        get {
+            return Double(sideLength * 4)
+        }
+    }
+}
+
+var square1 = Square()
+print(square1.name)
+
+class Rectangle: Shape {
+    var width = 6
+    var height = 4
+    override var area: Double {
+        get {
+            return Double(width * height)
+        }
+    }
+    override var perimeter: Double {
+        get {
+            return Double((width * 2) + (height * 2))
+        }
+    }
+}
+
+var rectangle1 = Rectangle()
+print(rectangle1.name)
+
 ```
 
 a. Given the `Shape` object above, create a subclass `Square` with a property `sideLength` with a default value of 5.
@@ -92,7 +218,10 @@ myShapes.append(Rectangle())
 for shape in myShapes {
     print("This is a \(shape.name) with an area of \(shape.area) and a perimeter of \(shape.perimeter)")
 }
+
 ```
+Answer: the var myShapes is making an empty array from the class Shapes.  this array is then appended with the info from the subclasses Square and Rectangle.  The for loop then goes through the array myShapes and prints using string interpolation with the info from each iteration of this for loop
+
 
 ## Question 6
 
@@ -109,11 +238,20 @@ let distanceBetweenTwoPoints = sqrt(horizontalDistance * horizontalDistance + ve
 `sqrt` is a method in Swift that gives the square root.  Make sure to have `import Foundation` or `import UIKit` to use this method.
 
 ```swift
+
 struct Point {
     let x: Double
     let y: Double
+
     func distance(to point: Point) -> Double {
-      //Code in your answer here
+    
+        let horizontalDistance = self.x - point.x
+        
+        let verticalDistance = self.y - point.y
+        
+        let distanceBetweenTwoPoints = sqrt(horizontalDistance * horizontalDistance + verticalDistance * verticalDistance)
+        
+        return distanceBetweenTwoPoints
     }
 }
 
@@ -130,6 +268,15 @@ b. Given the above Point object, and Circle object below, add a `contains` metho
 struct Circle {
     let radius: Double
     let center: Point
+
+    func contains(point: Point) -> Bool {
+    
+        if center.distance(to: point) == radius {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 let pointOne = Point(x: 0, y: 0)
